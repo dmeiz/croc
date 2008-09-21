@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: SexpProcessor</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">SexpProcessor</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/vendor/sexp_processor_rb.html">
+                lib/vendor/sexp_processor.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+<a href="SexpProcessor.html">SexpProcessor</a> provides a uniform interface
+to <a href="SexpProcessor.html#M000132">process</a> Sexps.
+</p>
+<p>
+In order to create your own <a href="SexpProcessor.html">SexpProcessor</a>
+subclass you&#8216;ll need to call super in the initialize method, then set
+any of the <a href="Sexp.html">Sexp</a> flags you want to be different from
+the defaults.
+</p>
+<p>
+<a href="SexpProcessor.html">SexpProcessor</a> uses a <a
+href="Sexp.html">Sexp</a>&#8216;s type to determine which <a
+href="SexpProcessor.html#M000132">process</a> method to call in the
+subclass. For <a href="Sexp.html">Sexp</a> <tt>s(:lit, 1)</tt> <a
+href="SexpProcessor.html">SexpProcessor</a> will call process_lit, if it is
+defined.
+</p>
+<p>
+You can also specify a default method to call for any <a
+href="Sexp.html">Sexp</a> types without a process_&lt;type&gt; method or
+use the default processor provided to skip over them.
+</p>
+<p>
+Here is a simple example:
+</p>
+<pre>
+  class MyProcessor &lt; SexpProcessor
+    def initialize
+      super
+      self.strict = false
+    end
+
+    def process_lit(exp)
+      val = exp.shift
+      return val
+    end
+  end
+</pre>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000130">assert_empty</a>&nbsp;&nbsp;
+      <a href="#M000133">assert_type</a>&nbsp;&nbsp;
+      <a href="#M000129">new</a>&nbsp;&nbsp;
+      <a href="#M000134">on_error_in</a>&nbsp;&nbsp;
+      <a href="#M000132">process</a>&nbsp;&nbsp;
+      <a href="#M000135">process_dummy</a>&nbsp;&nbsp;
+      <a href="#M000131">rewrite</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">auto_shift_type</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Automatically shifts off the <a href="Sexp.html">Sexp</a> type before
+handing the <a href="Sexp.html">Sexp</a> to process_&lt;type&gt;
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">context</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Return a stack of contexts. Most recent node is first.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">debug</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+A Hash of <a href="Sexp.html">Sexp</a> types and Regexp.
+
+<p>
+Print a debug message if the <a href="Sexp.html">Sexp</a> type matches the
+Hash key and the <a href="Sexp.html">Sexp</a>&#8216;s inspect output
+matches the Regexp.
+</p>
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">default_method</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+A default method to call if a process_&lt;type&gt; method is not found for
+the <a href="Sexp.html">Sexp</a> type.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">expected</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Expected result class
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">require_empty</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Raise an exception if the <a href="Sexp.html">Sexp</a> is not empty after
+processing
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">strict</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Raise an exception if no process_&lt;type&gt; method is found for a <a
+href="Sexp.html">Sexp</a>.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">unsupported</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+An array that specifies node types that are unsupported by this processor.
+<a href="SexpProcessor.html">SexpProcessor</a> will raise <a
+href="UnsupportedNodeError.html">UnsupportedNodeError</a> if you try to <a
+href="SexpProcessor.html#M000132">process</a> one of those node types.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">warn_on_default</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Emit a warning when the method in default_method is called.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000129" class="method-detail">
+        <a name="M000129"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000129.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000129.html');return false;">
+          <span class="method-name">new</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="SexpProcessor.html#M000129">new</a> <a
+href="SexpProcessor.html">SexpProcessor</a>. Use super to invoke this
+initializer from <a href="SexpProcessor.html">SexpProcessor</a> subclasses,
+then use the attributes above to customize the functionality of the <a
+href="SexpProcessor.html">SexpProcessor</a>
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000130" class="method-detail">
+        <a name="M000130"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000130.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000130.html');return false;">
+          <span class="method-name">assert_empty</span><span class="method-args">(meth, exp, exp_orig)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000133.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000133.html');return false;">
+          <span class="method-name">assert_type</span><span class="method-args">(list, typ)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Raises unless the <a href="Sexp.html">Sexp</a> type for <tt>list</tt>
+matches <tt>typ</tt>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000134.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000134.html');return false;">
+          <span class="method-name">on_error_in</span><span class="method-args">(node_type, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Registers an error handler for <tt>node</tt>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000132.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000132.html');return false;">
+          <span class="method-name">process</span><span class="method-args">(exp)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Default <a href="Sexp.html">Sexp</a> processor. Invokes
+process_&lt;type&gt; methods matching the <a href="Sexp.html">Sexp</a> type
+given. Performs additional checks as specified by the initializer.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000135.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000135.html');return false;">
+          <span class="method-name">process_dummy</span><span class="method-args">(exp)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+A fairly generic processor for a dummy node. Dummy nodes are used when your
+processor is doing a complicated <a
+href="SexpProcessor.html#M000131">rewrite</a> that replaces the current
+sexp with multiple sexps.
+</p>
+<p>
+Bogus Example:
+</p>
+<pre>
+  def process_something(exp)
+    return s(:dummy, process(exp), s(:extra, 42))
+  end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000131" class="method-detail">
+        <a name="M000131"></a>
+
+        <div class="method-heading">
+          <a href="SexpProcessor.src/M000131.html" target="Code" class="method-signature"
+            onclick="popupCode('SexpProcessor.src/M000131.html');return false;">
+          <span class="method-name">rewrite</span><span class="method-args">(exp)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>rewrite (SexpProcessor)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/sexp_processor.rb, line 171</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite</span>(<span class="ruby-identifier">exp</span>)
+    <span class="ruby-identifier">type</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">first</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">context</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-identifier">type</span> <span class="ruby-comment cmt"># FIX: first one doubles up because process already unshifted -- look at moving initial rewrite up above</span>
+    <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">map!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">sub</span><span class="ruby-operator">|</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">sub</span> <span class="ruby-value">? </span><span class="ruby-identifier">rewrite</span>(<span class="ruby-identifier">sub</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">sub</span> }
+
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">meth</span> = <span class="ruby-ivar">@rewriters</span>[<span class="ruby-identifier">type</span>]
+      <span class="ruby-identifier">exp</span>  = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">exp</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">meth</span>
+      <span class="ruby-identifier">old_type</span>, <span class="ruby-identifier">type</span> = <span class="ruby-identifier">type</span>, <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">first</span>
+    <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">old_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">context</span>.<span class="ruby-identifier">shift</span>
+
+    <span class="ruby-identifier">exp</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

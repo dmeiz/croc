@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>start (Thor)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/thor.rb, line 77</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">start</span>
+    <span class="ruby-identifier">meth</span> = <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">params</span> = []
+    <span class="ruby-keyword kw">while</span> <span class="ruby-operator">!</span><span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\-/</span>
+      <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-ivar">@map</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@map</span>[<span class="ruby-identifier">meth</span>]
+      <span class="ruby-identifier">meth</span> = <span class="ruby-ivar">@map</span>[<span class="ruby-identifier">meth</span>].<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">args</span> = <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">dup</span>
+    
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">assoc</span>(<span class="ruby-identifier">meth</span>)
+      <span class="ruby-identifier">opts</span> = <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">assoc</span>(<span class="ruby-identifier">meth</span>).<span class="ruby-identifier">last</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">opt</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">opt</span>, <span class="ruby-identifier">val</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Getopt</span><span class="ruby-operator">::</span><span class="ruby-constant">BOOLEAN</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Getopt</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">val</span>)].<span class="ruby-identifier">flatten</span>}
+      <span class="ruby-identifier">options</span> = <span class="ruby-constant">Getopt</span><span class="ruby-operator">::</span><span class="ruby-constant">Long</span>.<span class="ruby-identifier">getopts</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+      <span class="ruby-identifier">params</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">options</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">replace</span> <span class="ruby-identifier">args</span>
+    
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-identifier">params</span>).<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@results&quot;</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
