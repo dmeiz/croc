@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>process_block_pass (Ruby2Ruby)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/ruby2ruby.rb, line 184</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_block_pass</span>(<span class="ruby-identifier">exp</span>)
+    <span class="ruby-identifier">bname</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block_arg</span>, <span class="ruby-identifier">process</span>(<span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>)) <span class="ruby-comment cmt"># FIX</span>
+    <span class="ruby-identifier">call</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">call</span>.<span class="ruby-identifier">last</span> <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># HACK - I _really_ need rewrites to happen first</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">call</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">first</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:splat</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">call</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:array</span>, <span class="ruby-identifier">call</span>.<span class="ruby-identifier">pop</span>]
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:array</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-comment cmt"># do nothing</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">has_args</span> = <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">call</span>.<span class="ruby-identifier">last</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">call</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:array</span>
+        <span class="ruby-identifier">call</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:array</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">has_args</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">call</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">bname</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">call</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:array</span>, <span class="ruby-identifier">bname</span>]
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">process</span>(<span class="ruby-identifier">call</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

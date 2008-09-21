@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>util_dthing (Ruby2Ruby)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/ruby2ruby.rb, line 963</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">util_dthing</span>(<span class="ruby-identifier">exp</span>, <span class="ruby-identifier">regx</span> = <span class="ruby-keyword kw">false</span>)
+    <span class="ruby-identifier">s</span> = []
+    <span class="ruby-identifier">suck</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">suck</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">x</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>, <span class="ruby-value str">'\&quot;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n/</span>, <span class="ruby-value str">'\n'</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">x</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>.<span class="ruby-identifier">dump</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">x</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\//</span>, <span class="ruby-value str">'\/'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">regx</span>
+
+    <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span>
+    <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">pt</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">pt</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Sexp</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">pt</span>.<span class="ruby-identifier">first</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:str</span> <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">suck</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">x</span> = <span class="ruby-identifier">pt</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>, <span class="ruby-value str">'\&quot;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n/</span>, <span class="ruby-value str">'\n'</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">x</span> = <span class="ruby-identifier">pt</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">dump</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-identifier">x</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\//</span>, <span class="ruby-value str">'\/'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">regx</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'#{'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">process</span>(<span class="ruby-identifier">pt</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'}'</span> <span class="ruby-comment cmt"># do not use interpolation here</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-comment cmt"># do nothing - yet</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">s</span>.<span class="ruby-identifier">join</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

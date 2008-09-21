@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>process_iter (Ruby2Ruby)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/ruby2ruby.rb, line 514</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_iter</span>(<span class="ruby-identifier">exp</span>)
+    <span class="ruby-identifier">iter</span> = <span class="ruby-identifier">process</span> <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">args</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">args</span> = (<span class="ruby-identifier">args</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">''</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">process</span>(<span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">body</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">process</span>(<span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>)
+
+    <span class="ruby-identifier">b</span>, <span class="ruby-identifier">e</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">iter</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;END&quot;</span> <span class="ruby-keyword kw">then</span>
+             [ <span class="ruby-value str">&quot;{&quot;</span>, <span class="ruby-value str">&quot;}&quot;</span> ]
+           <span class="ruby-keyword kw">else</span>
+             [ <span class="ruby-value str">&quot;do&quot;</span>, <span class="ruby-value str">&quot;end&quot;</span> ]
+           <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">iter</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp re">/\(\)$/</span>, <span class="ruby-value str">''</span>)
+
+    <span class="ruby-comment cmt"># REFACTOR: ugh</span>
+    <span class="ruby-identifier">result</span> = []
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{iter} {&quot;</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; |#{args}|&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; #{body.strip} &quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">' '</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;}&quot;</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">join</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/\n/</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">LINE_LENGTH</span>
+
+    <span class="ruby-identifier">result</span> = []
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{iter} #{b}&quot;</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; |#{args}|&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\n&quot;</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">indent</span>(<span class="ruby-identifier">body</span>.<span class="ruby-identifier">strip</span>)
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\n&quot;</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">join</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

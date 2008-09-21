@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>process_args (Ruby2Ruby)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/ruby2ruby.rb, line 56</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_args</span>(<span class="ruby-identifier">exp</span>)
+    <span class="ruby-identifier">args</span> = []
+
+    <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">arg</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">arg</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">first</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:block</span> <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">asgns</span> = {}
+          <span class="ruby-identifier">arg</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">lasgn</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">asgns</span>[<span class="ruby-identifier">lasgn</span>[<span class="ruby-value">1</span>]] = <span class="ruby-identifier">process</span>(<span class="ruby-identifier">lasgn</span>)
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">args</span>[<span class="ruby-identifier">index</span>] = <span class="ruby-identifier">asgns</span>[<span class="ruby-identifier">name</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">asgns</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">name</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:block_arg</span> <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&amp;#{arg.last}&quot;</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;unknown arg type #{arg.first.inspect}&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;unknown arg type #{arg.inspect}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;(#{args.join ', '})&quot;</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

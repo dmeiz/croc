@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Sexp</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Sexp</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/vendor/sexp_rb.html">
+                lib/vendor/sexp.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Array
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Sexps are the basic storage mechanism of <a
+href="SexpProcessor.html">SexpProcessor</a>. Sexps have a <tt>type</tt> (to
+be renamed <tt>node_type</tt>) which is the first element of the <a
+href="Sexp.html">Sexp</a>. The type is used by <a
+href="SexpProcessor.html">SexpProcessor</a> to determine whom to dispatch
+the <a href="Sexp.html">Sexp</a> to <a href="Sexp.html#M000138">for</a>
+processing.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000140">===</a>&nbsp;&nbsp;
+      <a href="#M000141">=~</a>&nbsp;&nbsp;
+      <a href="#M000142">array_type?</a>&nbsp;&nbsp;
+      <a href="#M000143">each_of_type</a>&nbsp;&nbsp;
+      <a href="#M000144">find_and_replace_all</a>&nbsp;&nbsp;
+      <a href="#M000138">for</a>&nbsp;&nbsp;
+      <a href="#M000139">from_array</a>&nbsp;&nbsp;
+      <a href="#M000145">gsub</a>&nbsp;&nbsp;
+      <a href="#M000146">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000137">new</a>&nbsp;&nbsp;
+      <a href="#M000147">sexp_body</a>&nbsp;&nbsp;
+      <a href="#M000148">shift</a>&nbsp;&nbsp;
+      <a href="#M000149">structure</a>&nbsp;&nbsp;
+      <a href="#M000150">sub</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000138.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000138.html');return false;">
+          <span class="method-name">for</span><span class="method-args">(klass, method = nil, walk_ancestors = false)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="Sexp.html#M000137">new</a> <a href="Sexp.html">Sexp</a>
+<a href="Sexp.html#M000138">for</a> <tt>klass</tt> or <tt>method</tt> in
+<tt>klass</tt>.
+</p>
+<p>
+If <tt>walk_ancestors</tt> is true and <tt>method</tt> is provided, walks
+the ancestors of <tt>klass</tt> until a method definition is found.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000139.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000139.html');return false;">
+          <span class="method-name">from_array</span><span class="method-args">(a)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="Sexp.html#M000137">new</a> <a href="Sexp.html">Sexp</a>
+from Array <tt>a</tt>, typically from ParseTree::translate.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000137.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000137.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a <a href="Sexp.html#M000137">new</a> <a href="Sexp.html">Sexp</a>
+containing <tt>args</tt>.
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000140.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000140.html');return false;">
+          <span class="method-name">===</span><span class="method-args">(sexp)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns true if this <a href="Sexp.html">Sexp</a>&#8216;s pattern matches
+<tt>sexp</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000141" class="method-detail">
+        <a name="M000141"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000141.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000141.html');return false;">
+          <span class="method-name">=~</span><span class="method-args">(pattern)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns true if this <a href="Sexp.html">Sexp</a> matches <tt>pattern</tt>.
+(Opposite of #===.)
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000142" class="method-detail">
+        <a name="M000142"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000142.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000142.html');return false;">
+          <span class="method-name">array_type?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns true if the node_type is <tt>array</tt> or <tt>args</tt>.
+</p>
+<p>
+REFACTOR: to TypedSexp - we only care when we have units.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000143" class="method-detail">
+        <a name="M000143"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000143.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000143.html');return false;">
+          <span class="method-name">each_of_type</span><span class="method-args">(t, &amp;b)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Enumeratates the sexp yielding to <tt>b</tt> when the node_type ==
+<tt>t</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000144" class="method-detail">
+        <a name="M000144"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000144.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000144.html');return false;">
+          <span class="method-name">find_and_replace_all</span><span class="method-args">(from, to)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Replaces all elements whose node_type is <tt>from</tt> with <tt>to</tt>.
+Used only <a href="Sexp.html#M000138">for</a> the most trivial of rewrites.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000145" class="method-detail">
+        <a name="M000145"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000145.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000145.html');return false;">
+          <span class="method-name">gsub</span><span class="method-args">(pattern, repl)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Replaces all Sexps matching <tt>pattern</tt> with <a
+href="Sexp.html">Sexp</a> <tt>repl</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000146" class="method-detail">
+        <a name="M000146"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000146.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000146.html');return false;">
+          <span class="method-name">method_missing</span><span class="method-args">(meth, delete=false)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the node named <tt>node</tt>, deleting it if <tt>delete</tt> is
+true.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000147" class="method-detail">
+        <a name="M000147"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000147.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000147.html');return false;">
+          <span class="method-name">sexp_body</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="Sexp.html">Sexp</a> without the node_type.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000148" class="method-detail">
+        <a name="M000148"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000148.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000148.html');return false;">
+          <span class="method-name">shift</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+If run with debug, <a href="Sexp.html">Sexp</a> will raise if you <a
+href="Sexp.html#M000148">shift</a> on an empty <a
+href="Sexp.html">Sexp</a>. Helps with debugging.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000149" class="method-detail">
+        <a name="M000149"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000149.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000149.html');return false;">
+          <span class="method-name">structure</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the bare bones <a href="Sexp.html#M000149">structure</a> of the
+sexp. s(:a, :b, s(:c, :d), :e) =&gt; s(:a, s(:c))
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000150" class="method-detail">
+        <a name="M000150"></a>
+
+        <div class="method-heading">
+          <a href="Sexp.src/M000150.html" target="Code" class="method-signature"
+            onclick="popupCode('Sexp.src/M000150.html');return false;">
+          <span class="method-name">sub</span><span class="method-args">(pattern, repl)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Replaces the <a href="Sexp.html">Sexp</a> matching <tt>pattern</tt> with
+<tt>repl</tt>.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

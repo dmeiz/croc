@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>process_defn (Ruby2Ruby)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/vendor/ruby2ruby.rb, line 336</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_defn</span>(<span class="ruby-identifier">exp</span>)
+    <span class="ruby-identifier">type1</span> = <span class="ruby-identifier">exp</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">type2</span> = <span class="ruby-identifier">exp</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">type1</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:args</span> <span class="ruby-keyword kw">and</span> [<span class="ruby-identifier">:ivar</span>, <span class="ruby-identifier">:attrset</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">type2</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">name</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">type2</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:ivar</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">clear</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;attr_reader #{name.inspect}&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:attrset</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">clear</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;attr_writer :#{name.to_s[0..-2]}&quot;</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unknown defn type: #{exp.inspect}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">type1</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">:args</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">name</span> = <span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">process</span>(<span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>)
+      <span class="ruby-identifier">args</span> = <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;()&quot;</span>
+      <span class="ruby-identifier">body</span> = <span class="ruby-identifier">indent</span>(<span class="ruby-identifier">process</span>(<span class="ruby-identifier">exp</span>.<span class="ruby-identifier">shift</span>))
+      <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;def #{name}#{args}\n#{body}\nend&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n\s*\n+/</span>, <span class="ruby-value str">&quot;\n&quot;</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unknown defn type: #{type1} for #{exp.inspect}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
