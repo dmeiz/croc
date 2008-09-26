@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>autocomplete</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Yehuda Katz">
+	<link rel="stylesheet" href="jquery.ui.autocomplete.css" type="text/css" media="screen" />
+  <script src="jquery.js"></script>
+  <script src="jquery.dimensions.js"></script>  
+  <script src="jquery.templating.js"></script>
+  <script src="jquery.ui.autocomplete.ext.js"></script>
+  <script src="jquery.ui.autocomplete.js"></script>
+  <script>
+    $(function() {
+      $("input.autocomplete").autocomplete({
+        ajax: "list", 
+        match: function(typed) { return this.text.match(new RegExp(typed)); },
+        insertText: function(obj) { return obj.text },
+        templateText: "<li>Hey: <%= text %></li>"
+      })
+        .bind("activate.autocomplete", function(e, d) { console.log(d); })
+        .bind("cancel.autocomplete", function(e) { console.log("Cancelled"); });
+    });
+  </script>
+</head>
+<body>
+  <input type="text" class="autocomplete" autocomplete="off" />
+</body>
+</html>

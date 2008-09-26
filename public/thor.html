@@ -1,11 +1,48 @@
 <html>
   <head>
+    <script type="text/javascript" src="jquery.js"></script>
     <script>
-      
+      suggestions = [
+        ['==', 'classes/SexpAny.html#M000025'],
+        ['===', 'classes/SexpAny.html#M000026'],
+        ['===', 'classes/Sexp.html#M000140'],
+        ['=~', 'classes/Sexp.html#M000141'],
+        ['ANY', 'classes/SexpMatchSpecials.html#M000162'],
+        ['array_type?', 'classes/Sexp.html#M000142'],
+        ['assert_empty', 'classes/SexpProcessor.html#M000130'],
+        ['assert_type', 'classes/SexpProcessor.html#M000133'],
+        ['cond_loop', 'classes/Ruby2Ruby.html#M000124'],
+        ['deep_clone', 'classes/Object.html#M000136'],
+        ['desc', 'classes/Thor.html#M000010'],
+        ['each_of_type', 'classes/Sexp.html#M000143']
+      ];
+
+      function find(q) {
+        return jQuery.map(suggestions, function(sug) {
+          if (sug[0].indexOf(q) < 0) {
+            return null;
+          }
+          return sug[0]
+        });
+      }
+
+      $(document).ready(function(){
+        $('input').keyup(function(e) {
+          matches = find(e.target.value);
+
+          html = '';
+          jQuery.each(matches, function() {
+            html += '<a href="#">' + this + '</a><br/>';
+          });
+
+          $('#suggestions').html(html);
+        });
+      });
     </script>
+
     <style>
       #suggestions {
-        border: 1px solid #eee;
+        border: 1px solid #bbb;
       }
     </style>
   </head>
@@ -14,10 +51,6 @@
       <input>
     </form>
     <div id="suggestions">
-      ==<br/>
-      ===<br/>
-      ===<br/>
-      =~<br/>
     </div>
   </body>
 </html>
