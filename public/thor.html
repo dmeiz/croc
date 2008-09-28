@@ -3,7 +3,7 @@
     <script type="text/javascript" src="jquery.js"></script>
     <script>
       suggestions = [
-        ['==', 'classes/SexpAny.html#M000025'],
+        ['==', 'file:///Users/dan/Projects/croc/public/thor-rdoc/classes/SexpAny.html#M000025'],
         ['===', 'classes/SexpAny.html#M000026'],
         ['===', 'classes/Sexp.html#M000140'],
         ['=~', 'classes/Sexp.html#M000141'],
@@ -19,20 +19,20 @@
 
       function find(q) {
         return jQuery.map(suggestions, function(sug) {
-          if (sug[0].indexOf(q) < 0) {
+          if (sug[0].toLowerCase().indexOf(q) < 0) {
             return null;
           }
-          return sug[0]
+          return sug
         });
       }
 
       $(document).ready(function(){
         $('input').keyup(function(e) {
-          matches = find(e.target.value);
+          matches = find(e.target.value.toLowerCase());
 
           html = '';
           jQuery.each(matches, function() {
-            html += '<a href="#">' + this + '</a><br/>';
+            html += '<a href="' + this[0] + '">' + this[1] + '</a><br/>';
           });
 
           $('#suggestions').html(html);
