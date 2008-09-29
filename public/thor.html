@@ -18,12 +18,17 @@
       ];
 
       function find(q) {
-        return jQuery.map(suggestions, function(sug) {
-          if (sug[0].toLowerCase().indexOf(q) < 0) {
-            return null;
+        if (q == null || jQuery.trim(q).length == 0) {
+          return [];
+        }
+
+        var sugs = [];
+        jQuery.each(suggestions, function(sug) {
+          if (this[0].toLowerCase().indexOf(q) >= 0) {
+            sugs.push(this);
           }
-          return sug
         });
+        return sugs;
       }
 
       $(document).ready(function(){
@@ -32,7 +37,7 @@
 
           html = '';
           jQuery.each(matches, function() {
-            html += '<a href="' + this[0] + '">' + this[1] + '</a><br/>';
+            html += '<a href="' + this[1] + '">' + this[0] + '</a><br/>';
           });
 
           $('#suggestions').html(html);
