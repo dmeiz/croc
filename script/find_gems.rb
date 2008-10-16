@@ -2,6 +2,8 @@ require "rubygems"
 require "hpricot"
 
 $rdoc_root = "/Library/Ruby/Gems/1.8/doc"
+$methods = []
+$classes = []
 
 # Print installed gems and whether rdocs are available and indeed installed.
 def print_gems
@@ -29,7 +31,18 @@ def index_gem(spec)
   end
 
   doc = Hpricot(open(methods_file))
-puts doc.search("#index-entries")
+  (doc/"#index-entries a").each do |el|
+puts el
+    if el.inner_html =~ /(\S+)\s+\((\w+)\)/
+      method = $1
+      klass = $2
+      methods << {:name => method, :class => klass}
+    else
+      puts %Q(Couldn't get method and class from "#{el.inner_html}")
+    end
+  end
+
+  puts "Got #{methods.length} methods"
 end
 
 # mainline
