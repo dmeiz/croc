@@ -3,7 +3,7 @@ require "hpricot"
 
 $rdoc_root = "/Library/Ruby/Gems/1.8/doc"
 $methods = []
-$classes = []
+$classes = {}
 
 # Print installed gems and whether rdocs are available and indeed installed.
 def print_gems
@@ -30,21 +30,63 @@ def index_gem(spec)
     puts "ERROR Couldn't find #{classes_file}"
   end
 
+  # collect classes
+  doc = Hpricot(open(classes_file))
+  (doc/"#index-entries a").each do |el|
+    klass = el.inner_html
+  
+    if $classes[klass]
+      puts "Already have class #{klass}"
+    else
+      $classes[klass] = {:name => klass, :url => el["href"]}
+    end
+  end
+
+  puts "Got #{$classes.length} classes"
+
+  # collect methods
   doc = Hpricot(open(methods_file))
   (doc/"#index-entries a").each do |el|
-puts el
     if el.inner_html =~ /(\S+)\s+\((\w+)\)/
       method = $1
-      klass = $2
-      methods << {:name => method, :class => klass}
+      if klass = $classes[$2]
+        $methods << {:name => method, :class => klass, :url => el["href"]}
+      else
+        puts %Q(Couldn't find class "#{$2} for method #{method}")
+      end
     else
       puts %Q(Couldn't get method and class from "#{el.inner_html}")
     end
   end
 
-  puts "Got #{methods.length} methods"
+  puts "Got #{$methods.length} methods"
+
+  # kk
 end
 
 # mainline
 
 index_gem(Gem.source_index.search(nil)[0])
+
+File.open("search.html", "w") do |f|
+  f.puts "<html>"
+  f.puts "<head>"
+  f.puts "<script>"
+
+  f.puts "  classes = {"
+  $classes.each_pair do |key, value|
+  f.puts "    '#{key}': {url: '#{value[:url]}'},"
+  end
+  f.puts "  };"
+
+  f.puts "  methods = {"
+  $methods.each do |method|
+  f.puts "    '#{method[:name]}': {url: '#{method[:url]}', class: '#{method[:class][:name]}'},"
+  end
+  f.puts "  };"
+
+  f.puts "</script>"
+  f.puts "</head>"
+  f.puts "<body/>"
+  f.puts "</html>"
+end
