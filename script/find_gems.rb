@@ -70,11 +70,7 @@ end
 
 index_gem(Gem.source_index.search(nil)[0])
 
-File.open("public/search.html", "w") do |f|
-  f.puts "<html>"
-  f.puts "<head>"
-  f.puts "<script>"
-
+File.open("public/data.js", "w") do |f|
   f.puts "  gems = ["
   $gems.each do |gem|
   f.puts "    {'name': '#{gem[:name]}': {dir: '#{gem[:dir]}'},"
@@ -92,9 +88,4 @@ File.open("public/search.html", "w") do |f|
   f.puts "    '#{method[:name]}': {url: '#{method[:url]}', class: '#{method[:class][:name]}'},"
   end
   f.puts "  };"
-
-  f.puts "</script>"
-  f.puts "</head>"
-  f.puts "<body/>"
-  f.puts "</html>"
 end
