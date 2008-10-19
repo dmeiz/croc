@@ -32,7 +32,8 @@ def index_gem(spec)
   end
 
   # collect gem
-  $gems << {:name => spec.name, :dir => rdoc_dir}
+  gem = {:name => spec.name, :dir => rdoc_dir, :classes => {}}
+  $gems << gem
 
   # collect classes
   doc = Hpricot(open(classes_file))
@@ -42,19 +43,17 @@ def index_gem(spec)
     if $classes[klass]
       puts "Already have class #{klass}"
     else
-      $classes[klass] = {:name => klass, :url => el["href"]}
+      gem[:classes][klass] = {:name => klass, :url => el["href"], :methods => []}
     end
   end
-
-  puts "Got #{$classes.length} classes"
 
   # collect methods
   doc = Hpricot(open(methods_file))
   (doc/"#index-entries a").each do |el|
     if el.inner_html =~ /(\S+)\s+\((\w+)\)/
       method = $1
-      if klass = $classes[$2]
-        $methods << {:name => method, :class => klass, :url => el["href"]}
+      if klass = gem[:classes][$2]
+        klass[:methods] << {:name => method, :class => klass, :url => el["href"]}
       else
         puts %Q(Couldn't find class "#{$2} for method #{method}")
       end
@@ -63,7 +62,7 @@ def index_gem(spec)
     end
   end
 
-  puts "Indexed #{spec.name}, got #{$classes.length} classes and #{$methods.length} methods"
+  puts "Indexed #{spec.name}"
 end
 
 # mainline
@@ -71,21 +70,17 @@ end
 index_gem(Gem.source_index.search(nil)[0])
 
 File.open("public/data.js", "w") do |f|
-  f.puts "  gems = ["
+  f.puts       "gems = ["
   $gems.each do |gem|
-  f.puts "    {'name': '#{gem[:name]}': {dir: '#{gem[:dir]}'},"
+    f.puts     "  {name: '#{gem[:name]}', dir: '#{gem[:dir]}', classes: ["
+    gem[:classes].each_pair do |key, value|
+      f.puts   "    {name: '#{key}', url: '#{value[:url]}', methods: ["
+      value[:methods].each do |method|
+        f.puts "      {name: '#{method[:name]}', url: '#{method[:url]}'},"
+      end
+      f.puts   "    ]},"
+    end
   end
-  f.puts "  ];"
-
-  f.puts "  classes = {"
-  $classes.each_pair do |key, value|
-  f.puts "    '#{key}': {url: '#{value[:url]}'},"
-  end
-  f.puts "  };"
-
-  f.puts "  methods = {"
-  $methods.each do |method|
-  f.puts "    '#{method[:name]}': {url: '#{method[:url]}', class: '#{method[:class][:name]}'},"
-  end
-  f.puts "  };"
+  f.puts       "  ]},"
+  f.puts       "];"
 end

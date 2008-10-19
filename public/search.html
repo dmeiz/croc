@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+    <script>
+      suggestions = [];
+
+      function find(q) {
+        if (q == null || jQuery.trim(q).length == 0) {
+          return [];
+        }
+
+        var sugs = [];
+        jQuery.each(suggestions, function(sug) {
+          if (this[0].toLowerCase().indexOf(q) >= 0) {
+            sugs.push(this);
+          }
+        });
+        return sugs;
+      }
+
+      $(document).ready(function(){
+        jQuery.each(gems, function(i, gem) {
+          suggestions.push([gem.name, "#"]);
+          jQuery.each(gem.classes, function(o, klass) {
+            suggestions.push([klass.name, "#"]);
+            jQuery.each(klass.methods, function(j, method) {
+              suggestions.push([method.name, "#"]);
+            })
+          })
+        });
+        $('input').keyup(function(e) {
+          matches = find(e.target.value.toLowerCase());
+
+          html = '';
+          jQuery.each(matches, function() {
+            html += '<a href="' + this[1] + '">' + this[0] + '</a><br/>';
+          });
+
+          $('#suggestions').html(html);
+        });
+      });
+    </script>
+
+    <style>
+      #suggestions {
+        border: 1px solid #bbb;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input>
+    </form>
+    <div id="suggestions">
+    </div>
+  </body>
+</html>
