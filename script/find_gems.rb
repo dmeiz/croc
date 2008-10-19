@@ -2,8 +2,9 @@ require "rubygems"
 require "hpricot"
 
 $rdoc_root = "/Library/Ruby/Gems/1.8/doc"
-$methods = []
+$gems = []
 $classes = {}
+$methods = []
 
 # Print installed gems and whether rdocs are available and indeed installed.
 def print_gems
@@ -29,6 +30,9 @@ def index_gem(spec)
   unless File.exists?(classes_file)
     puts "ERROR Couldn't find #{classes_file}"
   end
+
+  # collect gem
+  $gems << {:name => spec.name, :dir => rdoc_dir}
 
   # collect classes
   doc = Hpricot(open(classes_file))
@@ -59,19 +63,23 @@ def index_gem(spec)
     end
   end
 
-  puts "Got #{$methods.length} methods"
-
-  # kk
+  puts "Indexed #{spec.name}, got #{$classes.length} classes and #{$methods.length} methods"
 end
 
 # mainline
 
 index_gem(Gem.source_index.search(nil)[0])
 
-File.open("search.html", "w") do |f|
+File.open("public/search.html", "w") do |f|
   f.puts "<html>"
   f.puts "<head>"
   f.puts "<script>"
+
+  f.puts "  gems = ["
+  $gems.each do |gem|
+  f.puts "    {'name': '#{gem[:name]}': {dir: '#{gem[:dir]}'},"
+  end
+  f.puts "  ];"
 
   f.puts "  classes = {"
   $classes.each_pair do |key, value|
