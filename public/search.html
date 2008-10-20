@@ -11,31 +11,53 @@
         }
 
         var sugs = [];
-        jQuery.each(suggestions, function(sug) {
-          if (this[0].toLowerCase().indexOf(q) >= 0) {
-            sugs.push(this);
+        jQuery.each(gems, function(i, gem) {
+          var gemResult = null
+          if (gem.name.toLowerCase().indexOf(q) >= 0) {
+            var gemResult = [gem, []]
+            sugs.push(gemResult);
           }
+          jQuery.each(gem.classes, function(o, klass) {
+            if (klass.name.toLowerCase().indexOf(q) >= 0) {
+              if (!gemResult) {
+                gemResult = [gem, []]
+                sugs.push(gemResult);
+              }
+              gemResult[1].push(klass);
+            }
+            jQuery.each(klass.methods, function(j, method) {
+              if (method.name.toLowerCase().indexOf(q) >= 0) {
+                if (!gemResult) {
+                  gemResult = [gem, []]
+                  sugs.push(gemResult);
+                }
+                gemResult[1].push(method);
+              }
+            })
+          })
         });
         return sugs;
       }
 
       $(document).ready(function(){
-        jQuery.each(gems, function(i, gem) {
-          suggestions.push([gem.name, "#"]);
-          jQuery.each(gem.classes, function(o, klass) {
-            suggestions.push([klass.name, "#"]);
-            jQuery.each(klass.methods, function(j, method) {
-              suggestions.push([method.name, "#"]);
-            })
-          })
-        });
         $('input').keyup(function(e) {
           matches = find(e.target.value.toLowerCase());
 
           html = '';
-          jQuery.each(matches, function() {
-            html += '<a href="' + this[1] + '">' + this[0] + '</a><br/>';
+          jQuery.each(matches, function(i, gemResult) {
+            html += '<div class="gem">' + gemResult[0].name + '</div>'
+            jQuery.each(gemResult[1], function(j, classOrMethodResult) {
+              html += '<div class="class-or-method">' + classOrMethodResult.name + '</div>'
+            });
           });
+/*
+          jQuery.each(matches, function(i, gemResult) {
+            console.log(gemResult[0].name);
+            jQuery.each(gemResult[1], function(j, classOrMethod) {
+              console.log('  ' + classOrMethod.name);
+            });
+          });
+*/
 
           $('#suggestions').html(html);
         });
@@ -45,6 +67,14 @@
     <style>
       #suggestions {
         border: 1px solid #bbb;
+      }
+
+      #suggestions div.gem {
+        font-weight: bold;
+      }
+
+      #suggestions div.class-or-method {
+        padding-left: 1em;
       }
     </style>
   </head>
