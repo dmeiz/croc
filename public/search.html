@@ -45,19 +45,11 @@
 
           html = '';
           jQuery.each(matches, function(i, gemResult) {
-            html += '<div class="gem">' + gemResult[0].name + '</div>'
+            html += '<div class="gem"><a href="file://' + gemResult[0].dir + '/index.html">' + gemResult[0].name + '</a></div>'
             jQuery.each(gemResult[1], function(j, classOrMethodResult) {
-              html += '<div class="class-or-method">' + classOrMethodResult.name + '</div>'
+              html += '<div class="class-or-method"><a href="file://' + gemResult[0].dir + '/' + classOrMethodResult.url + '">' + classOrMethodResult.name + '</a></div>'
             });
           });
-/*
-          jQuery.each(matches, function(i, gemResult) {
-            console.log(gemResult[0].name);
-            jQuery.each(gemResult[1], function(j, classOrMethod) {
-              console.log('  ' + classOrMethod.name);
-            });
-          });
-*/
 
           $('#suggestions').html(html);
         });
