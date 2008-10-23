@@ -13,6 +13,19 @@ def print_gems
   end
 end
 
+# Collect specs for most recent version of all installed gems.
+def get_specs
+  specs = {}
+  Gem.source_index.search(nil).each do |spec|
+    if specs[spec.name]
+      specs[spec.name] = spec if (spec.version <=> specs[spec.name].version) > 0
+    else
+      specs[spec.name] = spec
+    end
+  end
+  specs.values
+end
+
 # Index a gem.
 def index_gem(spec)
   rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
@@ -50,7 +63,7 @@ def index_gem(spec)
   # collect methods
   doc = Hpricot(open(methods_file))
   (doc/"#index-entries a").each do |el|
-    if el.inner_html =~ /(\S+)\s+\((\w+)\)/
+    if el.inner_html =~ /(\S+)\s+\((\S+)\)/
       method = $1
       if klass = gem[:classes][$2]
         klass[:methods] << {:name => method, :class => klass, :url => el["href"]}
@@ -66,8 +79,19 @@ def index_gem(spec)
 end
 
 # mainline
-
-index_gem(Gem.source_index.search(nil)[0])
+get_specs[0..5].each do |spec|
+  rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
+  print spec.name + "..."
+  if spec.has_rdoc?
+    if File.exists?(rdoc_dir)
+      index_gem(spec)
+    else
+      puts "rdocs not installed"
+    end
+  else
+    puts "no rdocs"
+  end
+end
 
 File.open("public/data.js", "w") do |f|
   f.puts       "gems = ["
@@ -80,7 +104,7 @@ File.open("public/data.js", "w") do |f|
       end
       f.puts   "    ]},"
     end
+    f.puts     "  ]},"
   end
-  f.puts       "  ]},"
   f.puts       "];"
 end
