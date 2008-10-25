@@ -79,7 +79,7 @@ def index_gem(spec)
 end
 
 # mainline
-get_specs[0..5].each do |spec|
+get_specs[0..50].each do |spec|
   rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
   print spec.name + "..."
   if spec.has_rdoc?
