@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "../lib/croc"
+
+$rdoc_root = "/Library/Ruby/Gems/1.8/doc"
+$gems = []
+$classes = {}
+$methods = []
+$gem_home = find_gem_home
+
+get_specs[0..3].each do |spec|
+  if spec.has_rdoc?
+    gem_dir = File.join($gem_home, "#{spec.name}-#{spec.version}")
+    unless File.exists?(gem_dir)
+      puts "#{spec.name} is installed in the System gem directory, but croc works only if it's installed in your Library gem directory.  Install it? (y/n)"
+      response = STDIN.gets.strip
+      if response == "y"
+        `gem install -v #{spec.version} #{spec.name}`
+      end
+    end
+
+    rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
+    unless File.exists?(rdoc_dir)
+      puts "Rdocs for #{spec.name} haven't been installed.  Install them? (y/n)"
+      response = STDIN.gets.strip
+      if response == "y"
+        `gem rdoc -v #{spec.version} #{spec.name}`
+      end
+    end
+    index_gem(spec)
+  else
+    puts "no rdocs"
+  end
+end
+
+File.open("public/data.js", "w") do |f|
+  f.puts       "gems = ["
+  $gems.each do |gem|
+    f.puts     "  {name: '#{gem[:name]}', dir: '#{gem[:dir]}', classes: ["
+    gem[:classes].each_pair do |key, value|
+      f.puts   "    {name: '#{key}', url: '#{value[:url]}', methods: ["
+      value[:methods].each do |method|
+        f.puts "      {name: '#{method[:name]}', url: '#{method[:url]}'},"
+      end
+      f.puts   "    ]},"
+    end
+    f.puts     "  ]},"
+  end
+  f.puts       "];"
+end
