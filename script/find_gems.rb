@@ -6,6 +6,13 @@ $gems = []
 $classes = {}
 $methods = []
 
+# Figure out where rdocs are installed.
+def find_gem_home
+  if File.exists?("/Library/Ruby/Gems/1.8/gems")
+    return "/Library/Ruby/Gems/1.8/gems"
+  end
+end
+
 # Print installed gems and whether rdocs are available and indeed installed.
 def print_gems
   Gem.source_index.search(nil).each do |spec|
@@ -79,15 +86,28 @@ def index_gem(spec)
 end
 
 # mainline
-get_specs[0..50].each do |spec|
-  rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
-  print spec.name + "..."
+$gem_home = find_gem_home
+
+get_specs[0..3].each do |spec|
   if spec.has_rdoc?
-    if File.exists?(rdoc_dir)
-      index_gem(spec)
-    else
-      puts "rdocs not installed"
+    gem_dir = File.join($gem_home, "#{spec.name}-#{spec.version}")
+    unless File.exists?(gem_dir)
+      puts "#{spec.name} is installed in the System gem directory, but croc works only if it's installed in your Library gem directory.  Install it? (y/n)"
+      response = STDIN.gets.strip
+      if response == "y"
+        `gem install -v #{spec.version} #{spec.name}`
+      end
     end
+
+    rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
+    unless File.exists?(rdoc_dir)
+      puts "Rdocs for #{spec.name} haven't been installed.  Install them? (y/n)"
+      response = STDIN.gets.strip
+      if response == "y"
+        `gem rdoc -v #{spec.version} #{spec.name}`
+      end
+    end
+    index_gem(spec)
   else
     puts "no rdocs"
   end
