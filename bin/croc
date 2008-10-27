@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require "rubygems"
 require "croc"
 
@@ -8,6 +7,8 @@ $gems = []
 $classes = {}
 $methods = []
 $gem_home = find_gem_home
+
+install_assets
 
 get_specs[0..3].each do |spec|
   if spec.has_rdoc?
@@ -34,7 +35,7 @@ get_specs[0..3].each do |spec|
   end
 end
 
-File.open("public/data.js", "w") do |f|
+File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
   f.puts       "gems = ["
   $gems.each do |gem|
     f.puts     "  {name: '#{gem[:name]}', dir: '#{gem[:dir]}', classes: ["
@@ -49,3 +50,5 @@ File.open("public/data.js", "w") do |f|
   end
   f.puts       "];"
 end
+
+puts "Bookmark file://#{File.join(user_home_dir, ".croc", "index.html")}"

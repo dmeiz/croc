@@ -1,10 +1,30 @@
 require "rubygems"
 require "hpricot"
+require "ftools"
 
 # Figure out where rdocs are installed.
 def find_gem_home
   if File.exists?("/Library/Ruby/Gems/1.8/gems")
     return "/Library/Ruby/Gems/1.8/gems"
+  end
+end
+
+# Returns the user's home directory as a string.
+def user_home_dir
+  ENV["HOME"]
+end
+
+# Creates ~/.croc and installs assets from public directory.
+def install_assets
+  croc_dir = File.join(user_home_dir, ".croc")
+  unless File.exists?(croc_dir)
+    Dir.mkdir(croc_dir)
+  end
+
+  public_dir = File.join(File.dirname(__FILE__), "..", "public")
+  Dir.new(public_dir).each do |f|
+    next if f == "." || f == ".."
+    File.copy(File.join(public_dir, f), File.join(croc_dir, f))
   end
 end
 
