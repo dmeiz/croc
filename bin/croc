@@ -10,28 +10,21 @@ $gem_home = find_gem_home
 
 install_assets
 
-get_specs[0..3].each do |spec|
+get_specs.each do |spec|
   if spec.has_rdoc?
     gem_dir = File.join($gem_home, "#{spec.name}-#{spec.version}")
     unless File.exists?(gem_dir)
-      puts "#{spec.name} is installed in the System gem directory, but croc works only if it's installed in your Library gem directory.  Install it? (y/n)"
-      response = STDIN.gets.strip
-      if response == "y"
-        `gem install -v #{spec.version} #{spec.name}`
-      end
+      puts "Installing #{spec.name}-#{spec.version} in your Library gem directory"
+      `gem install -v #{spec.version} #{spec.name}`
     end
 
     rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
     unless File.exists?(rdoc_dir)
-      puts "Rdocs for #{spec.name} haven't been installed.  Install them? (y/n)"
-      response = STDIN.gets.strip
-      if response == "y"
-        `gem rdoc -v #{spec.version} #{spec.name}`
-      end
+      puts "Installing #{spec.name}-#{spec.version} rdocs"
+      `gem rdoc -v #{spec.version} #{spec.name}`
     end
+
     index_gem(spec)
-  else
-    puts "no rdocs"
   end
 end
 
