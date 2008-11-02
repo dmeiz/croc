@@ -1,6 +1,7 @@
 <html>
   <head>
     <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.dimensions.js"></script>
     <script type="text/javascript" src="data.js"></script>
     <script>
       suggestions = [];
@@ -40,7 +41,15 @@
         return sugs;
       }
 
+      function sizeElements() {
+        console.log($('input').position());
+        console.log($('input').height());
+        $('#suggestions').css('top', $('input').position()['top'] + $('input').outerHeight() + 'px');
+      }
+
       $(document).ready(function(){
+        sizeElements();
+
         $('input').keyup(function(e) {
           matches = find(e.target.value.toLowerCase());
 
@@ -56,7 +65,12 @@
             });
           });
 
-          $('#suggestions').html(html);
+          if (matches.length > 0) {
+            $('#suggestions').html(html).show();
+          }
+          else {
+            $('#suggestions').hide();
+          }
         });
 
         $('#suggestions').click(function(e) {
@@ -66,19 +80,31 @@
         });
 
         $('input').focus(function() {
-          $('#suggestions').show();
+          if (!$('#suggestions').innerHTML == "") {
+            $('#suggestions').show();
+          }
         });
+
+        $('input').focus();
       });
     </script>
 
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      form {
+        padding: 3px;
+      }
+
       #suggestions {
         border: 1px solid #bbb;
         position: absolute;
-        top: 35px;
-        left: 14px;
         background-color: #fff;
         color: #aaa;
+        padding: 3px;
       }
 
       #suggestions div.gem {
@@ -90,17 +116,17 @@
       }
 
       #iframe {
-        width: 100%;
-        height: 600px;
+        width: 95%;
+        height: 95%;
       }
     </style>
   </head>
   <body>
     <form>
       <input>
+      <div id="suggestions" style="display:none">
+      </div>
     </form>
-    <div id="suggestions">
-    </div>
     <iframe id="iframe" name="iframe">
     </iframe>
   </body>
