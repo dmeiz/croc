@@ -42,9 +42,9 @@
       }
 
       function sizeElements() {
-        console.log($('input').position());
-        console.log($('input').height());
         $('#suggestions').css('top', $('input').position()['top'] + $('input').outerHeight() + 'px');
+        $('#iframe').css('height', $(window).height() - $('input').outerHeight() - 5 + 'px' );
+        $('#iframe').css('width', $(window).width() - 5 + 'px' );
       }
 
       $(document).ready(function(){
@@ -80,7 +80,7 @@
         });
 
         $('input').focus(function() {
-          if (!$('#suggestions').innerHTML == "") {
+          if ($('#suggestions').innerHTML != "") {
             $('#suggestions').show();
           }
         });
@@ -90,13 +90,12 @@
     </script>
 
     <style>
+      * {
+        margin: 0;
+      }
       body {
         margin: 0;
         padding: 0;
-      }
-
-      form {
-        padding: 3px;
       }
 
       #suggestions {
@@ -105,6 +104,7 @@
         background-color: #fff;
         color: #aaa;
         padding: 3px;
+        font: 9pt sans-serif;
       }
 
       #suggestions div.gem {
@@ -113,11 +113,6 @@
 
       #suggestions div.class-or-method {
         padding-left: 1em;
-      }
-
-      #iframe {
-        width: 95%;
-        height: 95%;
       }
     </style>
   </head>
