@@ -28,18 +28,21 @@ get_specs.each do |spec|
   end
 end
 
+idx = 0
 File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
-  f.puts       "gems = ["
+  f.puts       "objs = ["
   $gems.each do |gem|
-    f.puts     "  {name: '#{gem[:name]}', dir: '#{gem[:dir]}', classes: ["
+    f.puts     "  {t: 'g', p: null, n: '#{gem[:name]}', u: '#{gem[:dir]}'},"
+    idx += 1
+    cidx = idx
     gem[:classes].each_pair do |key, value|
-      f.puts   "    {name: '#{key}', url: '#{value[:url]}', methods: ["
+      f.puts   "  {t: 'c', p: #{cidx}, n: '#{key}', u: '#{value[:url]}'},"
+      idx += 1
+      midx = idx
       value[:methods].each do |method|
-        f.puts "      {name: '#{method[:name]}', url: '#{method[:url]}'},"
+        f.puts "  {t: 'm', p: #{midx}, n: '#{method[:name]}', u: '#{method[:url]}'},"
       end
-      f.puts   "    ]},"
     end
-    f.puts     "  ]},"
   end
   f.puts       "];"
 end
