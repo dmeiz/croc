@@ -29,8 +29,7 @@ get_specs.each do |spec|
 end
 
 idx = -1
-#File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
-File.open(File.join("public/data.js"), "w") do |f|
+File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
   f.puts       "objs = ["
   $gems.each do |gem|
     f.puts     "  {t: 'g', p: null, n: '#{gem[:name]}', l: '#{gem[:name].downcase}', u: '#{gem[:dir]}'},"
