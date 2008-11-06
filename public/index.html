@@ -33,6 +33,11 @@
             }
 
             sugs.push(o);
+
+            if (sugs.length > 50) {
+              sugs.push(0)
+              break;
+            }
           }
         }
 
@@ -42,13 +47,18 @@
       function resultsToHtml(results) {
         html = '';
         jQuery.each(results, function(i, o) {
-          switch (o.t) {
-            case "g":
-              html += '<div class="gem"><a target="iframe" href="file://' + o.u + '/index.html">' + o.n + '</a></div>'; break;
-            case "c":
-              html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[o.p].u + '/' + o.u + '">' + o.n + '</a></div>'; break;
-            case "m":
-              html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[objs[o.p].p].u + '/' + objs[o.p].u + '#' + o.u + '">' + o.n + '</a>&nbsp;(' + objs[o.p].n + ')</div>'; break;
+          if (o == 0) {
+            html += '<div>...</div>';
+          }
+          else {
+            switch (o.t) {
+              case "g":
+                html += '<div class="gem"><a target="iframe" href="file://' + o.u + '/index.html">' + o.n + '</a></div>'; break;
+              case "c":
+                html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[o.p].u + '/' + o.u + '">' + o.n + '</a></div>'; break;
+              case "m":
+                html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[objs[o.p].p].u + '/' + objs[o.p].u + '#' + o.u + '">' + o.n + '</a>&nbsp;(' + objs[o.p].n + ')</div>'; break;
+            }
           }
         });
 
