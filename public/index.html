@@ -12,9 +12,27 @@
         }
 
         var sugs = [];
+        var includedGems = {};
         for (i in objs) {
-          if (objs[i].l.indexOf(q) >= 0) {
-            sugs.push(objs[i]);
+          o = objs[i];
+          if (o.l.indexOf(q) >= 0) {
+            if (o.t == "c") {
+              if (!includedGems[o.p]) {
+                includedGems[o.p] = true;
+                sugs.push(objs[o.p]);
+              }
+            }
+            else if (o.t == "m") {
+              if (!includedGems[objs[o.p].p]) {
+                includedGems[objs[o.p].p] = true;
+                sugs.push(objs[objs[o.p].p])
+              }
+            }
+            else {
+              includedGems[i] = true;
+            }
+
+            sugs.push(o);
           }
         }
 
