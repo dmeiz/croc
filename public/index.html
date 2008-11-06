@@ -11,28 +11,55 @@
           return [];
         }
 
+        gemPart = null;
+        if (q.indexOf(' ') > 0) {
+          a = q.split(/\s+/)
+          gemPart = a[0];
+          q = a[1];
+        }
+
         var sugs = [];
         var includedGems = {};
+        var parentGems = {};
+
+        if (gemPart) {
+          for (i in objs) {
+            o = objs[i];
+            if (o.t == "g") {
+              if (o.l.indexOf(gemPart) >= 0) {
+                parentGems[i] = true;
+              }
+            }
+          }
+        }
+
         for (i in objs) {
           o = objs[i];
           if (o.l.indexOf(q) >= 0) {
             if (o.t == "c") {
-              if (!includedGems[o.p]) {
-                includedGems[o.p] = true;
-                sugs.push(objs[o.p]);
+              if (!gemPart || parentGems[o.p]) {
+                if (!includedGems[o.p]) {
+                  includedGems[o.p] = true;
+                  sugs.push(objs[o.p]);
+                }
+                sugs.push(o);
               }
             }
             else if (o.t == "m") {
-              if (!includedGems[objs[o.p].p]) {
-                includedGems[objs[o.p].p] = true;
-                sugs.push(objs[objs[o.p].p])
+              if (!gemPart || parentGems[objs[o.p].p]) {
+                if (!includedGems[objs[o.p].p]) {
+                  includedGems[objs[o.p].p] = true;
+                  sugs.push(objs[objs[o.p].p])
+                }
+                sugs.push(o);
               }
             }
             else {
-              includedGems[i] = true;
+              if (!gemPart || parentGems[i]) {
+                includedGems[i] = true;
+                sugs.push(o);
+              }
             }
-
-            sugs.push(o);
 
             if (sugs.length > 50) {
               sugs.push(0)
