@@ -11,34 +11,85 @@
           return [];
         }
 
+        gemPart = null;
+        if (q.indexOf(' ') > 0) {
+          a = q.split(/\s+/)
+          gemPart = a[0];
+          q = a[1];
+        }
+
         var sugs = [];
-        jQuery.each(gems, function(i, gem) {
-          var gemResult = null
-          if (gem.name.toLowerCase().indexOf(q) >= 0) {
-            var gemResult = [gem, []]
-            sugs.push(gemResult);
-          }
-          jQuery.each(gem.classes, function(o, klass) {
-            if (klass.name.toLowerCase().indexOf(q) >= 0) {
-              if (!gemResult) {
-                gemResult = [gem, []]
-                sugs.push(gemResult);
+        var includedGems = {};
+        var parentGems = {};
+
+        if (gemPart) {
+          for (i in objs) {
+            o = objs[i];
+            if (o.t == "g") {
+              if (o.l.indexOf(gemPart) >= 0) {
+                parentGems[i] = true;
               }
-              gemResult[1].push(klass);
             }
-            jQuery.each(klass.methods, function(j, method) {
-              if (method.name.toLowerCase().indexOf(q) >= 0) {
-                if (!gemResult) {
-                  gemResult = [gem, []]
-                  sugs.push(gemResult);
+          }
+        }
+
+        for (i in objs) {
+          o = objs[i];
+          if (o.l.indexOf(q) >= 0) {
+            if (o.t == "c") {
+              if (!gemPart || parentGems[o.p]) {
+                if (!includedGems[o.p]) {
+                  includedGems[o.p] = true;
+                  sugs.push(objs[o.p]);
                 }
-                method.parentClass = klass;
-                gemResult[1].push(method);
+                sugs.push(o);
               }
-            })
-          })
-        });
+            }
+            else if (o.t == "m") {
+              if (!gemPart || parentGems[objs[o.p].p]) {
+                if (!includedGems[objs[o.p].p]) {
+                  includedGems[objs[o.p].p] = true;
+                  sugs.push(objs[objs[o.p].p])
+                }
+                sugs.push(o);
+              }
+            }
+            else {
+              if (!gemPart || parentGems[i]) {
+                includedGems[i] = true;
+                sugs.push(o);
+              }
+            }
+
+            if (sugs.length > 50) {
+              sugs.push(0)
+              break;
+            }
+          }
+        }
+
         return sugs;
+      }
+
+      function resultsToHtml(results) {
+        html = '';
+        jQuery.each(results, function(i, o) {
+          if (o == 0) {
+            html += '<div>...</div>';
+          }
+          else {
+            switch (o.t) {
+              case "g":
+                html += '<div class="gem"><a target="iframe" href="file://' + o.u + '/index.html">' + o.n + '</a></div>'; break;
+              case "c":
+                html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[o.p].u + '/' + o.u + '">' + o.n + '</a></div>'; break;
+              case "m":
+                html += '<div class="class-or-method"><a target="iframe" href="file://' + objs[objs[o.p].p].u + '/' + objs[o.p].u + '#' + o.u + '">' + o.n + '</a>&nbsp;(' + objs[o.p].n + ')</div>'; break;
+            }
+          }
+        });
+
+        return html;
       }
 
       function sizeElements() {
@@ -50,20 +101,27 @@
       $(document).ready(function(){
         sizeElements();
 
+        $(document).keyup(function(e) {
+          if (e.keyCode == 27) {
+            $('#suggestions').hide();
+          }
+        });
+
+        $('iframe').keyup(function(e) {
+          if (e.keyCode == 27) {
+            $('#suggestions').hide();
+          }
+        });
+
+        // search and update results
         $('input').keyup(function(e) {
+          if (e.keyCode == 27) {
+            return;
+          }
+
           matches = find(e.target.value.toLowerCase());
 
-          html = '';
-          jQuery.each(matches, function(i, gemResult) {
-            html += '<div class="gem"><a target="iframe" href="file://' + gemResult[0].dir + '/index.html">' + gemResult[0].name + '</a></div>'
-            jQuery.each(gemResult[1], function(j, classOrMethodResult) {
-              classHtml = '';
-              if (classOrMethodResult.parentClass) {
-                classHtml = '&nbsp;(' + classOrMethodResult.parentClass.name + ')';
-              }
-              html += '<div class="class-or-method"><a target="iframe" href="file://' + gemResult[0].dir + '/' + classOrMethodResult.url + '">' + classOrMethodResult.name + '</a> ' + classHtml + '</div>'
-            });
-          });
+          html = resultsToHtml(matches);
 
           if (matches.length > 0) {
             $('#suggestions').html(html).show();
@@ -73,19 +131,20 @@
           }
         });
 
+        // hide suggestions if user clicks on a link
         $('#suggestions').click(function(e) {
           if (e.target.nodeName == "A") {
             $('#suggestions').hide();
           }
         });
 
+        $('input').focus();
+
         $('input').focus(function() {
           if ($('#suggestions').innerHTML != "") {
             $('#suggestions').show();
           }
         });
-
-        $('input').focus();
       });
     </script>
 

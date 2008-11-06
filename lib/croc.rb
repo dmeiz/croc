@@ -88,7 +88,9 @@ def index_gem(spec)
     if el.inner_html =~ /(\S+)\s+\((\S+)\)/
       method = $1
       if klass = gem[:classes][$2]
-        klass[:methods] << {:name => method, :class => klass, :url => el["href"]}
+        el["href"] =~ /#(.*)$/
+        url = $1
+        klass[:methods] << {:name => method, :class => klass, :url => url}
       else
         puts %Q(Couldn't find class "#{$2} for method #{method}")
       end
