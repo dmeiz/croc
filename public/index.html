@@ -12,32 +12,12 @@
         }
 
         var sugs = [];
-        jQuery.each(gems, function(i, gem) {
-          var gemResult = null
-          if (gem.name.toLowerCase().indexOf(q) >= 0) {
-            var gemResult = [gem, []]
-            sugs.push(gemResult);
+        for (i in objs) {
+          if (objs[i].n.toLowerCase().indexOf(q) >= 0) {
+            sugs.push(objs[i]);
           }
-          jQuery.each(gem.classes, function(o, klass) {
-            if (klass.name.toLowerCase().indexOf(q) >= 0) {
-              if (!gemResult) {
-                gemResult = [gem, []]
-                sugs.push(gemResult);
-              }
-              gemResult[1].push(klass);
-            }
-            jQuery.each(klass.methods, function(j, method) {
-              if (method.name.toLowerCase().indexOf(q) >= 0) {
-                if (!gemResult) {
-                  gemResult = [gem, []]
-                  sugs.push(gemResult);
-                }
-                method.parentClass = klass;
-                gemResult[1].push(method);
-              }
-            })
-          })
-        });
+        }
+
         return sugs;
       }
 
@@ -54,15 +34,9 @@
           matches = find(e.target.value.toLowerCase());
 
           html = '';
-          jQuery.each(matches, function(i, gemResult) {
-            html += '<div class="gem"><a target="iframe" href="file://' + gemResult[0].dir + '/index.html">' + gemResult[0].name + '</a></div>'
-            jQuery.each(gemResult[1], function(j, classOrMethodResult) {
-              classHtml = '';
-              if (classOrMethodResult.parentClass) {
-                classHtml = '&nbsp;(' + classOrMethodResult.parentClass.name + ')';
-              }
-              html += '<div class="class-or-method"><a target="iframe" href="file://' + gemResult[0].dir + '/' + classOrMethodResult.url + '">' + classOrMethodResult.name + '</a> ' + classHtml + '</div>'
-            });
+          jQuery.each(matches, function(i, o) {
+            // html += '<div class="gem"><a target="iframe" href="file://' + gemResult[0].dir + '/index.html">' + gemResult[0].name + '</a></div>'
+            html += '<div class="gem"><a target="iframe" href="file://index.html">' + o.n + '</a></div>';
           });
 
           if (matches.length > 0) {
