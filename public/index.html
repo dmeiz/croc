@@ -74,7 +74,24 @@
       $(document).ready(function(){
         sizeElements();
 
+        $(document).keyup(function(e) {
+          if (e.keyCode == 27) {
+            $('#suggestions').hide();
+          }
+        });
+
+        $('iframe').keyup(function(e) {
+          if (e.keyCode == 27) {
+            $('#suggestions').hide();
+          }
+        });
+
+        // search and update results
         $('input').keyup(function(e) {
+          if (e.keyCode == 27) {
+            return;
+          }
+
           matches = find(e.target.value.toLowerCase());
 
           html = resultsToHtml(matches);
@@ -87,6 +104,7 @@
           }
         });
 
+        // hide suggestions if user clicks on a link
         $('#suggestions').click(function(e) {
           if (e.target.nodeName == "A") {
             $('#suggestions').hide();
