@@ -2,7 +2,7 @@ require "rake"
 
 Gem::Specification.new do |spec|
   spec.name = "croc"
-  spec.version = "0.9.0"
+  spec.version = "0.9.1"
   spec.date = Time.now
   spec.authors = "Dan Hensgen"
   spec.bindir = "bin" 
