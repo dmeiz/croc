@@ -51,7 +51,7 @@ end
 
 # Index a gem.
 def index_gem(spec)
-  rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
+  rdoc_dir = File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc")
   unless File.exists?(rdoc_dir)
     puts "WARN Couldn't find rdoc dir #{rdoc_dir}"
     return
@@ -93,10 +93,10 @@ def index_gem(spec)
         url = $1
         klass[:methods] << {:name => method, :class => klass, :url => url}
       else
-        puts %Q(Couldn't find class "#{$2} for method #{method}")
+        # puts %Q(Couldn't find class "#{$2} for method #{method}")
       end
     else
-      puts %Q(Couldn't get method and class from "#{el.inner_html}")
+      # puts %Q(Couldn't get method and class from "#{el.inner_html}")
     end
   end
 

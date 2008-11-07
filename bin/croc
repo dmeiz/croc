@@ -61,25 +61,8 @@ unless rdocs_to_install.empty?
     specs = specs - rdocs_to_install
   end
 end
-exit
 
-get_specs.each do |spec|
-  if spec.has_rdoc?
-    gem_dir = File.join($gem_home, "#{spec.name}-#{spec.version}")
-    unless File.exists?(gem_dir)
-      puts "Installing #{spec.name}-#{spec.version} in your Library gem directory"
-      `gem install -v #{spec.version} #{spec.name}`
-    end
-
-    rdoc_dir = File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc")
-    unless File.exists?(rdoc_dir)
-      puts "Installing #{spec.name}-#{spec.version} rdocs"
-      `gem rdoc -v #{spec.version} #{spec.name}`
-    end
-
-    index_gem(spec)
-  end
-end
+specs.each { |spec| index_gem(spec) }
 
 idx = -1
 File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
