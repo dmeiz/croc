@@ -39,6 +39,7 @@ end
 def get_specs
   specs = {}
   Gem.source_index.search(nil).each do |spec|
+    next unless spec.has_rdoc?
     if specs[spec.name]
       specs[spec.name] = spec if (spec.version <=> specs[spec.name].version) > 0
     else

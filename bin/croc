@@ -2,13 +2,66 @@
 require "rubygems"
 require "croc"
 
-$rdoc_root = "/Library/Ruby/Gems/1.8/doc"
 $gems = []
 $classes = {}
 $methods = []
-$gem_home = find_gem_home
 
 install_assets
+
+specs = get_specs
+
+# find gem home
+homes = {}
+specs.each do |spec|
+  spec.loaded_from =~ /^(.+)\/specifications/
+  homes[$1] = true
+end
+
+$home = homes.keys.detect { |home| home !~ /^\/System/ }
+$rdoc_home = File.join($home, "doc")
+$gem_home = File.join($home, "gems")
+
+puts "Indexing gems in #{$gem_home}"
+
+# install system gems
+gems_to_install = specs.select { |spec| spec.loaded_from =~ /^\/System/ }
+
+unless gems_to_install.empty?
+  puts "It looks like you're using a Mac and these gems are installed under /System:"
+  puts
+  puts "  #{gems_to_install.collect {|spec| "#{spec.name}-#{spec.version}"}.join(" ")}"
+  puts
+  puts "Croc can't index these, but installing them in your main gems directory"
+  puts "should solve the problem.  Install them (may require sudo)? (y/n)"
+  if gets.strip == "y"
+    gems_to_install.each do |spec|
+      puts "Installing #{spec.name}-#{spec.version}"
+      `gem install -v #{spec.version} #{spec.name}`
+    end
+  else
+    specs = specs - gems_to_install
+  end
+end
+
+# install rdocs
+rdocs_to_install = specs.select { |spec| !File.exists?(File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc"))}
+
+unless rdocs_to_install.empty?
+  puts "These gems have rdocs, but they're not installed:"
+  puts
+  puts "  #{rdocs_to_install.collect {|spec| "#{spec.name}-#{spec.version}"}.join(" ")}"
+  puts
+  puts "Install them (may require sudo)? (y/n)"
+  if gets.strip == "y"
+    rdocs_to_install.each do |spec|
+      puts "Installing rdocs for #{spec.name}-#{spec.version}"
+      `sudo gem rdoc -v #{spec.version} #{spec.name}`
+    end
+  else
+    specs = specs - rdocs_to_install
+  end
+end
+exit
 
 get_specs.each do |spec|
   if spec.has_rdoc?
@@ -18,7 +71,7 @@ get_specs.each do |spec|
       `gem install -v #{spec.version} #{spec.name}`
     end
 
-    rdoc_dir = File.join($rdoc_root, "#{spec.name}-#{spec.version}", "rdoc")
+    rdoc_dir = File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc")
     unless File.exists?(rdoc_dir)
       puts "Installing #{spec.name}-#{spec.version} rdocs"
       `gem rdoc -v #{spec.version} #{spec.name}`
