@@ -35,7 +35,7 @@
 
         for (i in objs) {
           o = objs[i];
-          if (o.l.indexOf(q) >= 0) {
+          if ((q[q.length - 1] == '.' && o.l == q.substr(0, q.length - 1)) || o.l.indexOf(q) >= 0) {
             if (o.t == "c") {
               if (!gemPart || parentGems[o.p]) {
                 if (!includedGems[o.p]) {
