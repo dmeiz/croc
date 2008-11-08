@@ -8,24 +8,19 @@ $methods = []
 
 install_assets
 
-Dir.chdir(File.join(user_home_dir, ".croc", "rdoc"))
-Dir.glob("*").each do |name|
-  next if name == "." || name == ".."
-  index_rdoc(name, File.join(Dir.pwd, name))
-end
-
 specs = get_specs
 
-# find gem home
 homes = {}
 specs.each do |spec|
   spec.loaded_from =~ /^(.+)\/specifications/
   homes[$1] = true
 end
 
+# find gem home
 $home = homes.keys.detect { |home| home !~ /^\/System/ }
 $rdoc_home = File.join($home, "doc")
 $gem_home = File.join($home, "gems")
+$croc_home = File.join(user_home_dir, ".croc")
 
 puts "Indexing gems in #{$gem_home}"
 
@@ -66,6 +61,14 @@ unless rdocs_to_install.empty?
   else
     specs = specs - rdocs_to_install
   end
+end
+
+if File.exists
+
+Dir.chdir(File.join(user_home_dir, ".croc", "rdoc"))
+Dir.glob("*").each do |name|
+  next if name == "." || name == ".."
+  index_rdoc(name, File.join(Dir.pwd, name))
 end
 
 specs.each { |spec| index_rdoc(spec.name, File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc")) }
