@@ -101,3 +101,15 @@ def index_rdoc(name, rdoc_dir)
 
   puts "Indexed #{name}"
 end
+
+def download(url, dest)
+  File.open(dest, "w") do |f|
+    url = URI.parse('http://localhost:4000/foo.txt')
+    http = Net::HTTP.new(url.host, url.port)
+    http.request_get('/foo.txt') do |resp|
+      resp.read_body do |s|
+        f.write(s)
+      end
+    end
+  end
+end
