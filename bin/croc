@@ -68,7 +68,7 @@ unless rdocs_to_install.empty?
   end
 end
 
-specs.each { |spec| index_gem(spec) }
+specs.each { |spec| index_rdoc(spec.name, File.join($rdoc_home, "#{spec.name}-#{spec.version}", "rdoc")) }
 
 idx = -1
 File.open(File.join(user_home_dir, ".croc", "data.js"), "w") do |f|
