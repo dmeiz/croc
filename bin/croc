@@ -68,12 +68,26 @@ unless File.exist?(File.join(croc_rdoc_dir, "ruby"))
   puts "Install Ruby and Stdlib rdocs from www.ruby-doc.org? (y/n)"
   if gets.strip == "y"
     install_rdocs("http://www.ruby-doc.org/download/ruby-1.8.6-core-rdocs.tgz", "core-1.8.6_HEAD", "ruby")
-    install_rdocs("http://www.ruby-doc.org/download/stdlib/ruby-doc-stdlib-0.10.1.tgz", "core-1.8.6_HEAD", "ruby")
+
+    Dir.chdir(croc_rdoc_dir)
+    puts "Installing http://www.ruby-doc.org/download/stdlib/ruby-doc-stdlib-0.10.1.tgz"
+    tgz_file = File.join(croc_rdoc_dir, "dest.tgz")
+    download("http://www.ruby-doc.org/download/stdlib/ruby-doc-stdlib-0.10.1.tgz", tgz_file)
+    `tar xzf #{tgz_file}`
+    src_file = File.join(croc_rdoc_dir, "ruby-doc-stdlib-0.10.1")
+    libdoc_dir = File.join(src_file, "stdlib", "libdoc")
+    Dir.chdir(libdoc_dir)
+    Dir.glob("**/index.html").each do |f|
+      f = File.split(f)[0]
+      move_to = File.split(f)[0].split(File::SEPARATOR).join('-')
+      File.move(File.join(libdoc_dir, f), File.join(croc_rdoc_dir, move_to))
+    end
+    File.delete(tgz_file)
+    FileUtils.rm_r(src_file)
   else
     specs = specs - rdocs_to_install
   end
 end
-exit
 
 Dir.chdir(File.join(user_home_dir, ".croc", "rdoc"))
 Dir.glob("*").each do |name|
