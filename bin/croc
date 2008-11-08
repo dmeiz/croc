@@ -63,17 +63,17 @@ unless rdocs_to_install.empty?
   end
 end
 
-unless File.exists(File.join($croc_dir, "rdoc", "ruby"))
+croc_rdoc_dir = File.join($croc_home, "rdoc")
+unless File.exist?(File.join(croc_rdoc_dir, "ruby"))
   puts "Install Ruby and Stdlib rdocs from www.ruby-doc.org? (y/n)"
   if gets.strip == "y"
-    rdocs_to_install.each do |spec|
-      puts "Installing rdocs for #{spec.name}-#{spec.version}"
-      `sudo gem rdoc -v #{spec.version} #{spec.name}`
-    end
+    install_rdocs("http://www.ruby-doc.org/download/ruby-1.8.6-core-rdocs.tgz", "core-1.8.6_HEAD", "ruby")
+    install_rdocs("http://www.ruby-doc.org/download/stdlib/ruby-doc-stdlib-0.10.1.tgz", "core-1.8.6_HEAD", "ruby")
   else
     specs = specs - rdocs_to_install
   end
 end
+exit
 
 Dir.chdir(File.join(user_home_dir, ".croc", "rdoc"))
 Dir.glob("*").each do |name|

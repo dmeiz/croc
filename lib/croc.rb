@@ -104,12 +104,25 @@ end
 
 def download(url, dest)
   File.open(dest, "w") do |f|
-    url = URI.parse('http://localhost:4000/foo.txt')
+    url = URI.parse(url)
     http = Net::HTTP.new(url.host, url.port)
-    http.request_get('/foo.txt') do |resp|
+    http.request_get(url.path) do |resp|
       resp.read_body do |s|
         f.write(s)
       end
     end
   end
+end
+
+def install_rdocs(url, src_dir_name, dest_dir_name)
+  croc_rdoc_dir = File.join($croc_home, "rdoc")
+  Dir.chdir(croc_rdoc_dir)
+  puts "Installing #{url}"
+  tgz_file = File.join(croc_rdoc_dir, "dest.tgz")
+  src_file = File.join(croc_rdoc_dir, src_dir_name)
+  dest_file = File.join(croc_rdoc_dir, dest_dir_name)
+  download(url, tgz_file)
+  `tar xzf #{tgz_file}`
+  File.rename(src_file, dest_file)
+  File.delete(tgz_file)
 end
