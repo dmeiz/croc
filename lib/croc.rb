@@ -1,6 +1,8 @@
 require "rubygems"
 require "hpricot"
 require "ftools"
+require "net/http"
+
 
 # Figure out where rdocs are installed.
 def find_gem_home
