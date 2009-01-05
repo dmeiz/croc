@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Title tag
+desc: ""
+type: :task
+component: croc
+release: 
+reporter: .
+status: :unstarted
+disposition: 
+creation_time: 2009-01-05 21:35:52.450274 Z
+references: []
+
+id: 1a3774926c8678258da9610a0bf91e8a8986f24f
+log_events: 
+- - 2009-01-05 21:35:53.098345 Z
+  - Dan Hensgen <dan@macbook>
+  - created
+  - ""
