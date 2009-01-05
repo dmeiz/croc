@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Fix Rubygems 1.3 deprecations
+desc: ""
+type: :task
+component: croc
+release: 
+reporter: Dan Hensgen <dan@macbook>
+status: :unstarted
+disposition: 
+creation_time: 2009-01-05 20:59:04.386741 Z
+references: []
+
+id: 0f3b681e83257c26cd16c9a5567db59d58774905
+log_events: 
+- - 2009-01-05 20:59:04.882813 Z
+  - Dan Hensgen <dan@macbook>
+  - created
+  - ""

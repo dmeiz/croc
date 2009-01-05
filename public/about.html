@@ -1,46 +1,74 @@
 <html>
   <head>
     <style>
+      body, th, td {
+        font: normal 12px sans-serif;
+      }
+
+      #main {
+        width: 640px;
+        margin: auto;
+      }
+
       th {
+        font-weight: bold;
         text-align: left;
+      }
+
+      h1 {
+        font-size: 1.7em;
+        color: #800;
+        border-bottom: 1px solid #888;
+        margin: 0 0 2px 0;
+      }
+
+      h2 {
+        font-size: 1.2em;
+        color: #a00;
+      }
+
+      #deck {
+        text-align: right;
+        color: #a00;
       }
     </style>
   </head>
   <body>
-    <h1>croc</h1>
-    <p>
-      Quick access to your locally installed rdocs.
-    </p>
+    <div id="main">
+      <h1>croc</h1>
+      <div id="deck">
+        Quick access to your locally installed rdocs
+      </div>
 
-    <h2>Examples with rspec</h2>
-    <table>
-      <tr>
-        <th>test</th>
-        <td>Gems, classes and methods that contain <em>test</em></td>
-      </tr>
-      <tr>
-        <th>test_finished.</th>
-        <td>Classes and methods named exactly <em>test_finished</em></td>
-      </tr>
-      <tr>
-        <th>rsp test</th>
-        <td>Classes and methods that contain <em>test</em> in gems that contain <em>rsp</em></td>
-      </tr>
-      <tr>
-        <th>rsp test_finished.</th>
-        <td>Classes and methods named exactly <em>test_finished</em> in gems that contain <em>rsp</em></td>
-      </tr>
-    </table>
+      <h2>Examples with rspec</h2>
+      <table>
+        <tr>
+          <th>test</th>
+          <td>Gems, classes and methods that contain <em>test</em></td>
+        </tr>
+        <tr>
+          <th>test_finished.</th>
+          <td>Classes and methods named exactly <em>test_finished</em></td>
+        </tr>
+        <tr>
+          <th>rsp test</th>
+          <td>Classes and methods that contain <em>test</em> in gems that contain <em>rsp</em></td>
+        </tr>
+        <tr>
+          <th>rsp test_finished.</th>
+          <td>Classes and methods named exactly <em>test_finished</em> in gems that contain <em>rsp</em></td>
+        </tr>
+      </table>
 
-    <h2>Install your own rdocs</h2>
-    <p>
-      Copy your rdocs directory to ~/.croc/rdoc and make sure it's named
-      something sensible.  Rerun croc.
-    </p>
+      <h2>Install your own rdocs</h2>
+      <p>
+        Copy your rdocs directory to ~/.croc/rdoc and make sure it's named
+        something sensible.  Rerun croc.
+      </p>
 
-    <h2>About</h2>
-    Copyright 2008 <a href="http://blog.methodhead.com">Dan Hensgen</a>.
-    Feeback appreciated at
-    <a href="mailto:dan@methodhead.com">dan@methodhead.com</a>.
+      <h2>About</h2>
+      Copyright 2008 <a href="http://blog.methodhead.com">Dan Hensgen</a>.
+      Feedback appreciated at <a href="mailto:dan@methodhead.com">dan@methodhead.com</a>.
+    </div>
   </body>
 </html>
