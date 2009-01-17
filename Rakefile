@@ -19,12 +19,13 @@ require 'croc'
 task :default => 'spec:run'
 
 PROJ.name = 'croc'
-PROJ.authors = 'FIXME (who is writing this software)'
-PROJ.email = 'FIXME (your e-mail)'
-PROJ.url = 'FIXME (project homepage)'
-PROJ.version = Croc::VERSION
+PROJ.authors = 'Dan Hensgen'
+PROJ.email = 'dan@methodhead.com'
+PROJ.url = 'https://rubyforge.org/projects/croc/'
+PROJ.version = "1.0.0"
 PROJ.rubyforge.name = 'croc'
 
 PROJ.spec.opts << '--color'
+PROJ.exclude << "bugs" << "\.sw.$" << ".ditz-config"
 
 # EOF

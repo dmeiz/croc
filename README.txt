@@ -1,32 +1,36 @@
 croc
-    by FIXME (your name)
-    FIXME (url)
+  by Dan Hensgen
+  http://www.methodhead.com
 
 == DESCRIPTION:
 
-FIXME (describe your package)
+  Croc indexes your locally installed rdocs and generates an HTML page with a
+  quick search box. The search works a bit like gotapi.com.
 
 == FEATURES/PROBLEMS:
 
-* FIXME (list of features or problems)
+* Indexes all locally installed gems
+* Installs missing rdocs when possible
+* Optionally installs Ruby and Standard Library rdocs
+* Untested on everything except Mac
 
 == SYNOPSIS:
 
-  FIXME (code sample of usage)
+  $ croc
 
 == REQUIREMENTS:
 
-* FIXME (list of requirements)
+  RubyGems 1.2+
 
 == INSTALL:
 
-* FIXME (sudo gem install, anything else)
+  $ sudo gem install croc
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 FIXME (different license?)
+Copyright (c) 2008 Dan Hensgen
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
