@@ -142,7 +142,7 @@
         $('input').focus();
 
         $('input').focus(function() {
-          if ($('#suggestions').innerHTML != "") {
+          if (!$('#suggestions').text().match(/^\s*$/)) {
             $('#suggestions').show();
           }
         });
