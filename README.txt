@@ -17,6 +17,7 @@ croc
 == SYNOPSIS:
 
   $ croc
+  $ open file:///Users/dan/.croc/index.html
 
 == REQUIREMENTS:
 
