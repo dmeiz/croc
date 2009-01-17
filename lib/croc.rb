@@ -33,7 +33,7 @@ end
 
 # Print installed gems and whether rdocs are available and indeed installed.
 def print_gems
-  Gem.source_index.search(nil).each do |spec|
+  Gem.source_index.search(Gem::Dependency.new("", nil)).each do |spec|
     puts "#{spec.name} #{spec.version} #{spec.has_rdoc? ? "has rdoc" : ""} #{File.exists?(rdoc_dir) ? "and it exists" : "but it doesn't exist"}"
   end
 end
@@ -41,7 +41,7 @@ end
 # Collect specs for most recent version of all installed gems.
 def get_specs
   specs = {}
-  Gem.source_index.search(nil).each do |spec|
+  Gem.source_index.search(Gem::Dependency.new("", nil)).each do |spec|
     next unless spec.has_rdoc?
     if specs[spec.name]
       specs[spec.name] = spec if (spec.version <=> specs[spec.name].version) > 0

@@ -5,8 +5,8 @@ type: :task
 component: croc
 release: 
 reporter: Dan Hensgen <dan@macbook>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2009-01-05 20:08:17.444087 Z
 references: []
 
@@ -15,4 +15,8 @@ log_events:
 - - 2009-01-05 20:08:17.947538 Z
   - Dan Hensgen <dan@macbook>
   - created
+  - ""
+- - 2009-01-17 01:11:27.697013 Z
+  - Dan Hensgen <dan@macbook>
+  - closed with disposition fixed
   - ""
